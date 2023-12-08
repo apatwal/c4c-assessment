@@ -1,0 +1,105 @@
+
+<head>
+  <title>Aditya Patwal C4C Assessment</title>
+  
+</head>
+<body>
+
+<div id="messageBoard">
+    <h1>
+    Message Board
+    </h1>
+    <input type="text" id="messageInput" placeholder="Hi there!">
+    <button onclick="postMessage()">
+        Post
+    </button>
+    <div id="messages"></div>
+</div>
+
+<style>
+    body {
+      
+      margin: 0 auto;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+    #messageBoard {
+      border: 1px;
+      background-color: rgb(74, 152, 226);
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    #messageInput {
+      width: 80%; 
+      height: 40px;
+      margin-bottom: 10px;
+    }
+    button{
+        color: cadetblue;
+        height: 40px;
+        font-size: large;
+    }
+    .messageBox {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+    .messageText {
+      font-size: 16px;
+      color: black;
+    }
+    .timestamp {
+      font-size: 12px;
+      color: black;
+      margin-top: 5px;
+    }
+  </style>
+
+<script>
+
+    const socket = io();
+
+    // get current time 
+    function getCurrentTime() {
+      const now = new Date();
+      const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      return time;
+    }
+  
+    // post a message with timestamp
+    function postMessage() {
+      var messageInput = document.getElementById('messageInput');
+      var message = messageInput.value.trim();
+  
+      if (message.length > 0 && message.length <= 128) {
+  
+        var messagesDiv = document.getElementById('messages');
+        var newMessageBox = document.createElement('div');
+        var newMessageDiv = document.createElement('div');
+        var timestamp = getCurrentTime();
+        
+        newMessageBox.classList.add('messageBox');
+        newMessageDiv.classList.add('messageText');
+        newMessageDiv.textContent = message;
+        
+        
+        var timestampDiv = document.createElement('div');
+        timestampDiv.classList.add('timestamp');
+        timestampDiv.textContent = timestamp ;
+        // socket.emit('message', { message, timestamp });
+  
+        newMessageBox.appendChild(newMessageDiv);
+        newMessageBox.appendChild(timestampDiv);
+        messagesDiv.insertBefore(newMessageBox, messagesDiv.firstChild);
+        messageInput.value = '';
+      }
+      else {
+        alert('Message must be non-empty and at most 128 characters long.');
+      }
+
+
+    }
+  </script>
+
+</body>
